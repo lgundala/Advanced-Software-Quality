@@ -1,0 +1,24 @@
+package test;
+
+import java.io.*;
+
+import java.util.*;
+
+import minicopier.*;
+
+setCurrentPercentAfterincreaseQueueCurrentSize(Copier copy){
+
+	event increaseQueueCurrentSize before(Copier copy): call (* increaseQueueCurrentSize(..)) && target(copy){}   
+	
+	event setCurrentPercent before(Copier copy): call (* setCurrentPercent()) && target(copy){}    
+	
+    ere: ~setCurrentPercent* |~(setCurrentPercent | increaseQueueCurrentSize)* increaseQueueCurrentSize *
+    
+	@match{
+        System.out.println("pattern matched");
+}
+    @fail { 
+        System.err.println("! setCurrentPercent() not called after increaseQueueCurrentSize() ");                        
+        __RESET;                                                                             
+    }
+}

@@ -1,0 +1,24 @@
+package test;
+
+import java.io.*;
+
+import java.util.*;
+
+import minicopier.*;
+
+add2basketBeforetreatQueue(Basket i){
+
+    event add2Basket before(Basket i): call (* add2Basket(..)) && target(i){}   
+
+    event treatQueue before(Basket i): call (* treatQueue()) && target(i){}             
+    
+    ere: ~treatQueue* |~(treatQueue | add2Basket)* add2Basket *
+                                             
+    @match{
+        System.out.println("pattern matched");
+}
+    @fail { 
+        System.err.println("! add2Basket() not called before treatQueue()");                        
+        __RESET;                                                                             
+    }
+}
