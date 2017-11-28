@@ -1,0 +1,24 @@
+package test;
+
+import java.io.*;
+
+import java.util.*;
+
+import minicopier.*;
+
+paste2URIStringAfteraddFile2Queue(Copier copy){
+
+	event addFile2Queue before(Copier copy): call (* addFile2Queue(..)) && target(copy){}   
+	
+	event paste2URIString before(Copier copy): call (* paste2URIString()) && target(copy){}             
+    
+	ere: ~paste2URIString* |~(paste2URIString | addFile2Queue)* addFile2Queue *
+	
+	@match{
+        System.out.println("pattern matched");
+}
+    @fail { 
+        System.err.println("! paste2URIString() not called after addFile2Queue()");                        
+        __RESET;                                                                             
+    }
+}

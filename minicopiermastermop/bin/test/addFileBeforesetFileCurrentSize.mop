@@ -1,0 +1,24 @@
+package test;
+
+import java.io.*;
+
+import java.util.*;
+
+import minicopier.*;
+
+addFileBeforesetFileCurrentSize(MainQueue j){
+
+    event addFile before(MainQueue j): call (* addFile(..)) && target(j){}   
+
+    event setFileCurrentSize before(MainQueue j): call (* setFileCurrentSize()) && target(j){}             
+    
+    ere: ~setFileCurrentSize* |~(setFileCurrentSize | addFile)* addFile *
+                                             
+    @match{
+        System.out.println("pattern matched");
+}
+    @fail { 
+        System.err.println("! addFile() not called before setFileCurrentSize()");                        
+        __RESET;                                                                             
+    }
+}

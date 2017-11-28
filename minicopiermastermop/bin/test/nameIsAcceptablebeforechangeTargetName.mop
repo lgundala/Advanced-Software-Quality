@@ -1,0 +1,24 @@
+package test;
+
+import java.io.*;
+
+import java.util.*;
+
+import minicopier.*;
+
+nameIsAcceptablebeforechangeTargetName(Copier copy){
+
+	event nameIsAcceptable before(Copier copy): call (* nameIsAcceptable(..)) && target(copy){}   
+	
+	event changeTargetName before(Copier copy): call (* changeTargetName()) && target(copy){}             
+    
+	ere: ~changeTargetName* |~(changeTargetName | nameIsAcceptable)* nameIsAcceptable *
+	
+	@match{
+        System.out.println("pattern matched");
+}
+    @fail { 
+        System.err.println("! nameIsAcceptable() not called before changeTargetName()");                        
+        __RESET;                                                                             
+    }
+}
